@@ -1,9 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Content from './Content'
+import Content from './pages/Content'
 import Form from './pages/Form'
 import ThankYouPage from './pages/ThankYou'
-import MentorOnBoardForm from './componenets/MentorOnBoardForm'
-import LandingPage from './componenets/LandingPage'
+import MentorOnBoardForm from './pages/MentorOnBoardForm'
+import LandingPage from './pages/LandingPage'
+import ThankYouMentor from './pages/ThankYouMentor'
+
 function App() {
 
   return (
@@ -15,6 +17,7 @@ function App() {
           <Route path="/thankyou" element={<ThankYouPage />} />
           <Route path="/mentorform" element={<MentorOnBoardForm />} />
           <Route path="/mentor" element={<LandingPage />} />
+          <Route path="/thank-you" element={<ThankYouMentor />} />
           
 
 

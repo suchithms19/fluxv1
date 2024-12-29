@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import BACKEND_URL from "../config";
 
 export default function AnimatedSignUpForm() {
     const [isVisible, setIsVisible] = useState(false);
@@ -53,7 +54,10 @@ export default function AnimatedSignUpForm() {
         // Only proceed with submission if there are no errors
         if (Object.keys(newErrors).length === 0) {
             try {
-                const response = await axios.post(`https://flux-backend-dmyq.onrender.com/api/submitform`, formData);
+                const response = await axios.post(
+                    `${BACKEND_URL}/api/submitform`, 
+                    formData
+                );
                 console.log('Form submitted successfully:', response.data);
                 navigate('/thankyou');
             } catch (error) {

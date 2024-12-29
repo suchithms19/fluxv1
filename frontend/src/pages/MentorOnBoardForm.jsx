@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Github, Linkedin, Twitter, Instagram, Upload } from 'lucide-react'
+import { Github, Linkedin, Twitter, Instagram, Upload, Loader2 } from 'lucide-react'
 import { Button } from '@/componenets/ui/button'
 import {
   Form,
@@ -13,9 +13,14 @@ import {
 import { Input } from '@/componenets/ui/input'
 import { Textarea } from '@/componenets/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/componenets/ui/radio-group'
+import { useNavigate } from 'react-router-dom';
+import BACKEND_URL from "../config";
 
 
 const MentorForm = () => {
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const form = useForm({
     defaultValues: {
       fullName: '',
@@ -32,13 +37,85 @@ const MentorForm = () => {
       twitter: '',
       github: '',
       instagram: '',
+      mentoringAreas: [],
     },
-  })
-
+  });
 
   const onSubmit = async (values) => {
-    console.log(values)
-    // Handle form submission here
+    try {
+      const requiredFields = [
+        'fullName',
+        'email',
+        'phone',
+        'gender',
+        'organization',
+        'role',
+        'experience',
+        'headline',
+        'bio',
+        'languages',
+        'mentoringAreas'
+      ];
+
+      let hasError = false;
+      requiredFields.forEach(field => {
+        if (!values[field] || (Array.isArray(values[field]) && values[field].length === 0)) {
+          form.setError(field, {
+            type: 'required',
+            message: 'This field is required'
+          });
+          hasError = true;
+        }
+      });
+
+      if (values.email && !/\S+@\S+\.\S+/.test(values.email)) {
+        form.setError('email', {
+          type: 'pattern',
+          message: 'Please enter a valid email address'
+        });
+        hasError = true;
+      }
+
+      if (values.phone && !/^\d{10}$/.test(values.phone)) {
+        form.setError('phone', {
+          type: 'pattern',
+          message: 'Please enter a valid 10-digit phone number'
+        });
+        hasError = true;
+      }
+
+      if (hasError) {
+        return;
+      }
+
+      setIsSubmitting(true);
+      const response = await fetch(
+        `${BACKEND_URL}/api/submitMentorForm`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        }
+      );
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Form submission failed');
+      }
+      
+      navigate('/thank-you');
+      
+    } catch (error) {
+      console.error('Error:', error);
+      form.setError('root', {
+        type: 'submitError',
+        message: error.message || 'Failed to submit form. Please try again.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -58,15 +135,20 @@ const MentorForm = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-           
+            {form.formState.errors.root && (
+              <div className="rounded-md bg-red-50 p-4 text-red-600">
+                {form.formState.errors.root.message}
+              </div>
+            )}
 
-            <div >
+            <div>
               <FormField
                 control={form.control}
                 name="fullName"
+                rules={{ required: "Name is required" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Name </FormLabel>
                     <FormControl>
                       <Input placeholder="Arjun Mehra" {...field} />
                     </FormControl>
@@ -80,9 +162,16 @@ const MentorForm = () => {
               <FormField
                 control={form.control}
                 name="email"
+                rules={{ 
+                  required: "Email is required",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Please enter a valid email address"
+                  }
+                }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Email </FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="arjun@example.com" {...field} />
                     </FormControl>
@@ -233,8 +322,49 @@ const MentorForm = () => {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="mentoringAreas"
+              rules={{ required: "Please select at least one mentoring area" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mentoring Areas</FormLabel>
+                  <FormControl>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {[
+                        { id: 'job-seekers', label: 'Job Seekers' },
+                        { id: 'mba-cat', label: 'MBA/CAT' },
+                        { id: 'freelancing', label: 'Freelancing' },
+                        { id: 'coding', label: 'Coding' },
+                      ].map((option) => (
+                        <div
+                          key={option.id}
+                          className={`
+                            cursor-pointer rounded-lg border-2 p-4 text-center
+                            ${field.value.includes(option.id) 
+                              ? 'border-[#ffe05c] bg-[#ffe05c]/10' 
+                              : 'border-gray-200'
+                            }
+                          `}
+                          onClick={() => {
+                            const newValue = field.value.includes(option.id)
+                              ? field.value.filter(v => v !== option.id)
+                              : [...field.value, option.id];
+                            field.onChange(newValue);
+                          }}
+                        >
+                          {option.label}
+                        </div>
+                      ))}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Social Media Links</h3>
+              <h3 className="text-sm font-medium">Social Media Links (Optional)</h3>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -251,7 +381,6 @@ const MentorForm = () => {
                           />
                         </FormControl>
                       </div>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -270,7 +399,6 @@ const MentorForm = () => {
                           />
                         </FormControl>
                       </div>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -289,7 +417,6 @@ const MentorForm = () => {
                           />
                         </FormControl>
                       </div>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -299,8 +426,16 @@ const MentorForm = () => {
             <Button 
               type="submit" 
               className="w-full bg-[#ffe05c] text-black hover:text-white"
+              disabled={isSubmitting}
             >
-              Submit Application
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                'Submit Application'
+              )}
             </Button>
           </form>
         </Form>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from './componenets/Header';
-import Hero from './componenets/Hero';
-import FeatureSection from './componenets/FeatureSection';
-import CallToAction from './componenets/CallToAction';
+import Header from '../componenets/Header';
+import Hero from '../componenets/Hero';
+import FeatureSection from '../componenets/FeatureSection';
+import CallToAction from '../componenets/CallToAction';
 import image1 from '/src/assets/image1.png';
 import image2 from "/src/assets/image2.png";
 import image3 from "/src/assets/image3.png";
-import Calendly from './componenets/Calendly';
-import Footer from './componenets/Footer';
+import Calendly from '../componenets/Calendly';
+import Footer from '../componenets/Footer';
 
 const Content = () => {
   const navigate = useNavigate();
