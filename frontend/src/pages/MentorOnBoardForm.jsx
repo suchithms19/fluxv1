@@ -330,12 +330,12 @@ const MentorForm = () => {
                 <FormItem>
                   <FormLabel>Mentoring Areas</FormLabel>
                   <FormControl>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
                       {[
-                        { id: 'job-seekers', label: 'Job Seekers' },
+                        { id: 'coding-software', label: 'Coding & Software' },
                         { id: 'mba-cat', label: 'MBA/CAT' },
                         { id: 'freelancing', label: 'Freelancing' },
-                        { id: 'coding', label: 'Coding' },
+                        { id: 'career-job', label: 'Career & Job' },
                       ].map((option) => (
                         <div
                           key={option.id}
@@ -364,7 +364,7 @@ const MentorForm = () => {
             />
 
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Social Media Links (Optional)</h3>
+              <h3 className="text-sm font-medium">Social Media Links</h3>
               <div className="space-y-4">
                 <FormField
                   control={form.control}

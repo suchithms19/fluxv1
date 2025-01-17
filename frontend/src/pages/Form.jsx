@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BACKEND_URL from "../config";
 
 export default function AnimatedSignUpForm() {
     const [isVisible, setIsVisible] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         source: '',
@@ -54,6 +55,7 @@ export default function AnimatedSignUpForm() {
         // Only proceed with submission if there are no errors
         if (Object.keys(newErrors).length === 0) {
             try {
+                setIsSubmitting(true);
                 const response = await axios.post(
                     `${BACKEND_URL}/api/submitform`, 
                     formData
@@ -62,6 +64,8 @@ export default function AnimatedSignUpForm() {
                 navigate('/thankyou');
             } catch (error) {
                 console.error('Error submitting form:', error.response ? error.response.data : error.message);
+            } finally {
+                setIsSubmitting(false);
             }
         }
     };
@@ -161,9 +165,17 @@ export default function AnimatedSignUpForm() {
 
                     <button
                         type="submit"
-                        className="w-full bg-customYellow text-black py-2 sm:py-3 px-4 rounded-lg font-bold hover:scale-105 text-sm sm:text-base"
+                        disabled={isSubmitting}
+                        className="w-full bg-customYellow text-black py-2 sm:py-3 px-4 rounded-lg font-bold hover:scale-105 text-sm sm:text-base disabled:opacity-70 disabled:hover:scale-100"
                     >
-                        Join
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center">
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                <span>Joining...</span>
+                            </div>
+                        ) : (
+                            'Join'
+                        )}
                     </button>
                 </form>
             </div>

@@ -5,7 +5,7 @@ import ThankYouPage from './pages/ThankYou'
 import MentorOnBoardForm from './pages/MentorOnBoardForm'
 import LandingPage from './pages/LandingPage'
 import ThankYouMentor from './pages/ThankYouMentor'
-
+import Test from './pages/Test'
 function App() {
 
   return (
@@ -18,6 +18,7 @@ function App() {
           <Route path="/mentorform" element={<MentorOnBoardForm />} />
           <Route path="/mentor" element={<LandingPage />} />
           <Route path="/thank-you" element={<ThankYouMentor />} />
+          <Route path="/test" element={<Test />} />
           
 
 

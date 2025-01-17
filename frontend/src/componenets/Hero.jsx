@@ -1,6 +1,5 @@
 import React from 'react';
-import limitedmobile from '/src/assets/limitedmobile.png';
-import limitedlap from '/src/assets/limitedlap.png';
+
 
 const Hero = ({ isVisible, handleJoinWait,handleJoinMentor }) => {
   
@@ -119,7 +118,7 @@ const Hero = ({ isVisible, handleJoinWait,handleJoinMentor }) => {
         .moving-strip {
           display: flex;
           white-space: nowrap;
-          animation: scroll 20s linear infinite;
+          animation: scroll 15s linear infinite;
         }
         .strip-content {
           display: flex;
