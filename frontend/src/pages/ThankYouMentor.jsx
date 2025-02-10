@@ -28,9 +28,9 @@ const ThankYouMentor = () => {
             <p >
               Your expertise and willingness to guide others is truly appreciated.
             </p>
-            <p>
+            {/* <p>
               Our team will carefully review your application and get back to you. We'll reach out via email with next steps and additional information.
-            </p>
+            </p> */}
             
           </div>
         </div>

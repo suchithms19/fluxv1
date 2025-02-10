@@ -20,9 +20,8 @@ app.post('/api/submitMentorForm', async (req, res) => {
   try {
     // Validate required fields
     const requiredFields = [
-      'fullName', 'email', 'phone', 'gender', 'organization',
-      'role', 'experience', 'headline', 'bio', 'languages',
-      'mentoringAreas'
+      'fullName', 'email', 'phone', 'organization',
+      'role', 'experience', 'mentoringAreas'
     ];
 
     for (const field of requiredFields) {

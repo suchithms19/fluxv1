@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Github, Linkedin, Twitter, Instagram, Upload, Loader2 } from 'lucide-react'
+import { Github, Linkedin, Twitter, Instagram, Loader2 } from 'lucide-react'
 import { Button } from '@/componenets/ui/button'
 import {
   Form,
@@ -11,8 +11,7 @@ import {
   FormMessage,
 } from '@/componenets/ui/form'
 import { Input } from '@/componenets/ui/input'
-import { Textarea } from '@/componenets/ui/textarea'
-import { RadioGroup, RadioGroupItem } from '@/componenets/ui/radio-group'
+
 import { useNavigate } from 'react-router-dom';
 import BACKEND_URL from "../config";
 
@@ -26,16 +25,10 @@ const MentorForm = () => {
       fullName: '',
       email: '',
       phone: '',
-      gender: 'male',
       organization: '',
       role: '',
       experience: '',
-      headline: '',
-      bio: '',
-      languages: '',
       linkedin: '',
-      twitter: '',
-      github: '',
       instagram: '',
       mentoringAreas: [],
     },
@@ -47,13 +40,9 @@ const MentorForm = () => {
         'fullName',
         'email',
         'phone',
-        'gender',
         'organization',
         'role',
         'experience',
-        'headline',
-        'bio',
-        'languages',
         'mentoringAreas'
       ];
 
@@ -148,7 +137,7 @@ const MentorForm = () => {
                 rules={{ required: "Name is required" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name </FormLabel>
+                    <FormLabel>Name <span className="text-red-500">*</span></FormLabel>
                     <FormControl>
                       <Input placeholder="Arjun Mehra" {...field} />
                     </FormControl>
@@ -171,7 +160,7 @@ const MentorForm = () => {
                 }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email </FormLabel>
+                    <FormLabel>Email <span className="text-red-500">*</span></FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="arjun@example.com" {...field} />
                     </FormControl>
@@ -182,9 +171,16 @@ const MentorForm = () => {
               <FormField
                 control={form.control}
                 name="phone"
+                rules={{ 
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^\d{10}$/,
+                    message: "Please enter a valid 10-digit phone number"
+                  }
+                }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
                     <FormControl>
                       <Input type="tel" placeholder="9019526435" {...field} />
                     </FormControl>
@@ -196,47 +192,11 @@ const MentorForm = () => {
 
             <FormField
               control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Gender</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-wrap gap-4"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="male" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Male</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="female" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Female</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="others" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Others</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="organization"
+              rules={{ required: "Organization is required" }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current Organization</FormLabel>
+                  <FormLabel>Current Organization <span className="text-red-500">*</span></FormLabel>
                   <FormControl>
                     <Input placeholder="Company or Institution name" {...field} />
                   </FormControl>
@@ -249,9 +209,10 @@ const MentorForm = () => {
               <FormField
                 control={form.control}
                 name="role"
+                rules={{ required: "Role is required" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Current Role</FormLabel>
+                    <FormLabel>Current Role <span className="text-red-500">*</span></FormLabel>
                     <FormControl>
                       <Input placeholder="Senior Developer" {...field} />
                     </FormControl>
@@ -262,9 +223,10 @@ const MentorForm = () => {
               <FormField
                 control={form.control}
                 name="experience"
+                rules={{ required: "Experience is required" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Work Experience</FormLabel>
+                    <FormLabel>Work Experience (years) <span className="text-red-500">*</span></FormLabel>
                     <FormControl>
                       <Input type="number" min="0" placeholder="5" {...field} />
                     </FormControl>
@@ -276,64 +238,15 @@ const MentorForm = () => {
 
             <FormField
               control={form.control}
-              name="headline"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Headline</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Goldman Sachs| IIMA Rank 8 | Entrepreneur"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bio / About You</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="min-h-[150px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="languages"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Languages you're fluent in</FormLabel>
-                  <FormControl>
-                    <Input placeholder="English, Kannada, Hindi" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="mentoringAreas"
               rules={{ required: "Please select at least one mentoring area" }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mentoring Areas</FormLabel>
+                  <FormLabel>Mentoring Areas <span className="text-red-500">*</span></FormLabel>
                   <FormControl>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {[
                         { id: 'coding-software', label: 'Coding & Software' },
-                        { id: 'mba-cat', label: 'MBA/CAT' },
                         { id: 'freelancing', label: 'Freelancing' },
                         { id: 'career-job', label: 'Career & Job' },
                       ].map((option) => (
@@ -378,24 +291,6 @@ const MentorForm = () => {
                             placeholder="LinkedIn profile URL" 
                             {...field}
                             className="transition-all hover:border-[#0077B5] focus:border-[#0077B5]"
-                          />
-                        </FormControl>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="twitter"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex items-center gap-2">
-                        <Twitter className="h-5 w-5 text-[#1DA1F2]" />
-                        <FormControl className="flex-1">
-                          <Input 
-                            placeholder="Twitter profile URL" 
-                            {...field}
-                            className="transition-all hover:border-[#1DA1F2] focus:border-[#1DA1F2]"
                           />
                         </FormControl>
                       </div>

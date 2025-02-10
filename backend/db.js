@@ -42,11 +42,6 @@ const mentorFormSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  gender: {
-    type: String,
-    required: true,
-    enum: ['male', 'female', 'others'],
-  },
   organization: {
     type: String,
     required: true,
@@ -61,21 +56,6 @@ const mentorFormSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  headline: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  bio: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  languages: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   mentoringAreas: {
     type: [String],
     required: true,
@@ -87,14 +67,6 @@ const mentorFormSchema = new mongoose.Schema({
     }
   },
   linkedin: {
-    type: String,
-    trim: true,
-  },
-  twitter: {
-    type: String,
-    trim: true,
-  },
-  github: {
     type: String,
     trim: true,
   },
